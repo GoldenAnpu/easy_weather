@@ -1,0 +1,17 @@
+{% extends 'current_weather.html' %}
+{% load static %}
+
+{% block delete_city_button %}
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            {{ delete_city.as_p }}
+            <button type="submit" class="btn-close" aria-label="Close"
+                    style="position: absolute; right: 20px; top: 20px;"></button>
+        </form>
+        <div style="position: absolute; right: 40px; top: 40px;">
+            <img src="{% static 'png_clouds/weather.png' %}"
+                 width="120px" alt="">
+        </div>
+    </div>
+{% endblock %}

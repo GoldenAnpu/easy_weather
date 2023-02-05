@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content_img %}
+
+    <div style="flex: 1; " draggable="false">
+        <img src="{% static 'easy_weather_back.png' %}" alt="back"
+             style="height: 93vh; pointer-events: none; user-select: none"/>
+    </div>
+{% endblock %}
+
+{% block back_text %}
+    <div style="flex: 3; text-align: left; margin-top: 60vh; padding-right: 6%; user-select: none">
+        <h2 style="color: darkslategrey; display: inline-block">Discover a
+            brighter tomorrow with Easy Weather.</h2>
+        <p style="color: darkslategrey; display: inline-block">Stay a step
+            ahead of Mother Nature with our intuitive weather platform, giving you the
+            latest information, from current conditions to detailed forecasts, all with just a few clicks.</p>
+    </div>
+{% endblock %}

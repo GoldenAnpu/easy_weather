@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Forecast
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="album py-5">
+        <div class="container">
+            <div class="row h-4">
+                {% for city in cities %}
+                    <div class="col-md-4">
+                        <div class="card mb-4 box-shadow" style="border-radius: 25px;">
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between mb-0 pb-2">
+                                    <div>
+                                        <h2 class="display-2"><strong>23°C</strong></h2>
+                                        <p class="text-muted mb-0">{{ city }}</p>
+                                        <p class="mb-1">Description:</p>
+                                        <p class="mb-1">Feels like:</p>
+                                        <p class="mb-1">Humidity:</p>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <img src="{% static 'png_clouds/weather.png' %}"
+                                                 width="120px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
