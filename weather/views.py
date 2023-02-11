@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, reverse
+from easy_weather.settings import GOOGLE_MAPS_API_KEY
 from django.views.generic import View
 import asyncio
 from .models import CurrentWeatherInDB
@@ -6,7 +7,7 @@ from .forms import CityInputForm
 from .weather_services import SessionCityList, Weather, convert_to_celsius
 
 
-def prepare_info_for_render(city, data):
+def prepare_info_for_render(city, data, weather_in_db):
     c_name = data['name']
     country = data['sys']['country']
     temperature, feels_like = convert_to_celsius(data)
@@ -20,7 +21,8 @@ def prepare_info_for_render(city, data):
                  'feels_like': feels_like,
                  'humidity': humidity,
                  'description': description,
-                 'image': image}  # get only those data what need to show
+                 'image': image,
+                 'weather_in_db': weather_in_db}  # get only those data what need to show
     return info_dict
 
 
@@ -55,10 +57,10 @@ def current_weather(request):
         else:
             data = asyncio.run(weather_from_api.return_weather())  # get through API
             weather_in_db.add_city_data(data)  # save this data in DB and use
-        info_for_render = prepare_info_for_render(c, data)  # create info for widget
+        info_for_render = prepare_info_for_render(c, data, weather_in_db)  # create info for widget
         info.append(info_for_render)  # populate list that will be rendered
     return render(request, 'current_weather.html', context={'cities': info,
-                                                            'city_input_field': current_weather_form
+                                                            'city_input_field': current_weather_form,
                                                             })
 
 
@@ -83,3 +85,8 @@ def get_city_name_from_input(request):
         if form.is_valid():
             SessionCityList(request).append_city_in_session(form.cleaned_data)
         return redirect(request.path)
+
+
+def detailed_weather(request, city):
+    city_data = CurrentWeatherInDB.objects.get(city__iexact=city)
+    return render(request, 'detailed_weather.html', context={'data': city_data, 'API_KEY': GOOGLE_MAPS_API_KEY})
