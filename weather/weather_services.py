@@ -1,4 +1,5 @@
 from aiohttp import ClientSession
+from easy_weather.settings import OPEN_WEATHER_API_KEY
 
 
 class Weather:
@@ -10,7 +11,7 @@ class Weather:
         """ This function gets weather through API"""
         async with ClientSession() as session:
             url = f'https://api.openweathermap.org/data/2.5/weather'
-            params = {'q': self.city, 'APPID': '1ce84de0cfb5e686578ab6264f56a84f'}
+            params = {'q': self.city, 'APPID': OPEN_WEATHER_API_KEY}
             async with session.get(url=url, params=params) as response:
                 weather_json = await response.json()
                 return weather_json
