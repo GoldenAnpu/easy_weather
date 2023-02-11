@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime, timedelta
+from django.shortcuts import reverse
 
 
 # Create your models here.
@@ -9,6 +10,9 @@ class CurrentWeatherInDB(models.Model):
     city = models.CharField(primary_key=True, max_length=85)
     data = models.JSONField(blank=False)
     check_datetime = models.DateTimeField(auto_now=True)
+
+    def get_absolute_url(self):
+        return reverse('detailed_weather', kwargs={'city': self.city})
 
     def __str__(self):
         return self.city
@@ -44,9 +48,6 @@ class CurrentWeatherInDB(models.Model):
             city.data = city_data
             city.save()
         return city_data
-
-
-
 
 # class ForecastWeather(CurrentWeatherInDB):
 #     def certain_day_weather(self):
