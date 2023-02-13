@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from django.shortcuts import reverse
 
 
@@ -11,11 +11,23 @@ class CurrentWeatherInDB(models.Model):
     data = models.JSONField(blank=False)
     check_datetime = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.city
+
     def get_absolute_url(self):
         return reverse('detailed_weather', kwargs={'city': self.city})
 
-    def __str__(self):
-        return self.city
+    def convert_sunrise(self):
+        sunrise = self.data['sys']['sunrise']
+        dt_object = datetime.fromtimestamp(sunrise, timezone.utc)
+        formatted_sunrise = dt_object.strftime('%H:%M %Z')
+        return formatted_sunrise
+
+    def convert_sunset(self):
+        sunset = self.data['sys']['sunset']
+        dt_object = datetime.fromtimestamp(sunset, timezone.utc)
+        formatted_sunset = dt_object.strftime('%H:%M %Z')
+        return formatted_sunset
 
     def is_city_in_db(self):
         """ Check if city already in DB"""
@@ -24,11 +36,6 @@ class CurrentWeatherInDB(models.Model):
             return True
         except CurrentWeatherInDB.DoesNotExist:
             return False
-
-    def get_city_data(self):
-        """ Get data with weather from DB for current city """
-        self.city_data = CurrentWeatherInDB.objects.get(city=self.city)
-        return self.city_data.data
 
     def is_timestamp_outdated(self):
         """ Checks update time in column check_datetime of data in database and compare with current time.
@@ -41,9 +48,9 @@ class CurrentWeatherInDB(models.Model):
         else:
             return False
 
-    def add_city_data(self, city_data):
+    def add_city_data(self, city_data, city_name):
         """ Create new entity in DB for the following city and place data gathered from API"""
-        city, new = CurrentWeatherInDB.objects.update_or_create(city=self.city, defaults={'data': city_data})
+        city, new = CurrentWeatherInDB.objects.update_or_create(city=city_name, defaults={'data': city_data})
         if not new:
             city.data = city_data
             city.save()
