@@ -10,7 +10,10 @@ Discover a brighter tomorrow with Easy Weather.
 
 Stay a step ahead of Mother Nature with our intuitive weather platform, giving you the latest information, from current conditions to detailed forecasts, all with just a few clicks.
 </div>
+
 </div>
+
+<a style="font-size: 20px; font-weight: 500" href="http://143.42.49.64:8000/">Try it here</a>
 
 ### What needs to be done
  - city field: validation on an empty field
