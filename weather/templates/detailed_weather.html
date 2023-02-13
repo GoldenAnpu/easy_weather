@@ -10,20 +10,27 @@
 {% endblock %}
 
 {% block content %}
+    <div><h3 style="text-align: center; margin-top: 4%">Detailed Weather for {{ data }}</h3></div>
     <div class="album py-5">
         <div class="container">
             <div class="row h-4 align-center">
                 <div class="col-md-6">
-                    <div class="card mb-4 box-shadow" style="border-radius: 25px;">
+                    <div class="card card-right mb-4 box-shadow" style="border-radius: 25px; width:440px; height:400px; float: right">
                         <div class="card-body p-4">
                             <div class="d-flex justify-content-between mb-0 pb-2">
                                 <div>
                                     <h4 class="text-muted mb-0">
-                                        <strong>{{ data }}, {{ data.data.sys.country }}</strong></h4>
-                                    <h3 class="display-6"><strong>{{ data.data.main.temp }}°C</strong></h3>
-                                    <p class="mb-1">Description: {{ data.data.weather.0.description }}</p>
-                                    <p class="mb-1">Feels like: {{ data.data.main.feels_like }}°C</p>
+                                        <strong>{{ data.data.name }}, {{ data.data.sys.country }}</strong></h4>
+                                    <h3 class="display-6"><strong>{{ data.data.main.temp|floatformat:0 }}°C</strong></h3>
+                                    <p class="mb-1">Description: {{ data.data.weather.0.description|title }}</p>
+                                    <p class="mb-1">Feels like: {{ data.data.main.feels_like|floatformat:0 }}°C</p>
+                                    <p class="mb-1">Min Temp: {{ data.data.main.temp_min|floatformat:0 }}°C</p>
+                                    <p class="mb-1">Max Temp: {{ data.data.main.temp_max|floatformat:0 }}°C</p>
                                     <p class="mb-1">Humidity: {{ data.data.main.humidity }}%</p>
+                                    <p class="mb-1">Pressure: {{ data.data.main.pressure }}hPa</p>
+                                    <p class="mb-1">Wind Speed: {{ data.data.wind.speed|floatformat:1 }}m/s</p>
+                                    <p class="mb-1">Sunrise at: {{ data.convert_sunrise}}</p>
+                                    <p class="mb-1">Sunset at: {{ data.convert_sunset}}</p>
                                 </div>
                                 <div>
                                     <div style="position: absolute; right: 40px; top: 40px;">
@@ -38,29 +45,29 @@
 
                 </div>
                 <div class="col-md-6">
-                        <div class='card' id="map" style="width:600px; height:400px; border-radius: 25px;">
-                            <script>
-                                function initMap() {
-                                    var lat = {{ data.data.coord.lat }};
-                                    var lng = {{ data.data.coord.lon }};
-                                    var myLatLng = {lat: lat, lng: lng};
-                                    var map = new google.maps.Map(document.getElementById('map'), {
-                                        zoom: 8,
-                                        mapId: '5505e5dcf9bbf873',
-                                        mapTypeID: 'roadmap',
-                                        center: myLatLng
-                                    });
-                                    var marker = new google.maps.Marker({
-                                        position: myLatLng,
-                                        map: map
-                                    });
-                                }
-                            </script>
-                            <script async defer
-                                    src="https://maps.googleapis.com/maps/api/js?key={{ API_KEY }}&callback=initMap">
-                            </script>
-                        </div>
+                    <div class='card' id="map" style="width:600px; height:400px; border-radius: 25px;">
+                        <script>
+                            function initMap() {
+                                var lat = {{ data.data.coord.lat }};
+                                var lng = {{ data.data.coord.lon }};
+                                var myLatLng = {lat: lat, lng: lng};
+                                var map = new google.maps.Map(document.getElementById('map'), {
+                                    zoom: 10,
+                                    mapId: '5505e5dcf9bbf873',
+                                    mapTypeID: 'roadmap',
+                                    center: myLatLng
+                                });
+                                var marker = new google.maps.Marker({
+                                    position: myLatLng,
+                                    map: map
+                                });
+                            }
+                        </script>
+                        <script async defer
+                                src="https://maps.googleapis.com/maps/api/js?key={{ API_KEY }}&callback=initMap">
+                        </script>
                     </div>
+                </div>
             </div>
         </div>
     </div>

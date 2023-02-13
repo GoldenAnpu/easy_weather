@@ -1,20 +1,27 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block content_img %}
-
+{% block content_img_text %}
+<div style="display: flex; align-items: baseline; margin-top: 20px">
     <div style="flex: 1; " draggable="false">
-        <img src="{% static 'easy_weather_back.png' %}" alt="back"
-             style="height: 93vh; pointer-events: none; user-select: none"/>
-    </div>
-{% endblock %}
 
-{% block back_text %}
-    <div style="flex: 3; text-align: left; margin-top: 60vh; padding-right: 6%; user-select: none">
+            <img src="{% static 'easy_weather_back.png' %}"
+                 srcset="{% static 'small_easy_weather_back.png' %} 600w, {% static 'medium_easy_weather_back.png' %} 800w, {% static 'easy_weather_back.png' %} 2500w"
+                 sizes="<media condition> <width>, <media condition> <width>, <optional default image width>"
+                 alt="back"/>
+
+    </div>
+    <div style="flex: 3; text-align: left; padding-right: 6%; user-select: none; position: sticky; top: 64vh;">
         <h2 style="color: darkslategrey; display: inline-block">Discover a
             brighter tomorrow with Easy Weather.</h2>
         <p style="color: darkslategrey; display: inline-block">Stay a step
             ahead of Mother Nature with our intuitive weather platform, giving you the
             latest information, from current conditions to detailed forecasts, all with just a few clicks.</p>
+        <a class="btn btn-light" style="float: right; margin-right: 25%;" href="{% url 'current_weather' %}">Stay Ahead of the Storm</a>
     </div>
+</div>
+{% endblock %}
+
+{% block back_text %}
+
 {% endblock %}

@@ -1,45 +1,33 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{#<script>#}
-{#  document.getElementById("add_city").addEventListener("submit", function(event){#}
-{#    if (!this.checkValidity()) {#}
-{#      event.preventDefault();#}
-{#      event.stopPropagation();#}
-{#      alert("Form is not valid. Please fill in all required fields.");#}
-{#      return false;#}
-{#    }#}
-{#  });#}
-{#</script>#}
-
 {% block title %}
     Current Weather
 {% endblock %}
 
 {% block city_input_field %}
+
     <div class="mb-3 p-5 w-50 mx-auto">
-        <label for="city_input_field" class="form-label">Add the city for which you want to observe:</label>
-        <form id='add_city' method="post">
-            <div class="input-group flex-nowrap ">
-                <label class="input-group-text"
-                       id="addon-wrapping"
-                       style="border-top-left-radius: 0.375rem; border-bottom-left-radius: 0.375rem;">
-                    City
-                </label>
-                {% csrf_token %}
-                {{ city_input_field }}
+        <label for="city_input_field" style="margin-bottom: 4px; font-size: 20px; font-weight: 500">
+            Enter the city for which you want to get weather.
+        </label>
+        <form  id='add_city' method="post">
+            {% csrf_token %}
+            <div class="input-group">
+                <span class="input-group-text" id="addon_city">City</span>
+                {{ city_input_field.city_input_field }}
             </div>
+            {% if city_input_field.city_input_field.errors %}
+                <div class="text-danger" style="font-size: 14px; padding-left: 8%">{{ city_input_field.city_input_field.errors.0 }}</div>
+            {% endif %}
+
         </form>
     </div>
-    {% for field in city_input_field %}
-        {% if field.errors %}
-            {{ field.errors|join:", "  }}
-        {% endif %}
-    {% endfor %}
+
 {% endblock %}
 
 {% block content %}
-
+    <div><h3 style="text-align: center">Your "Current Weather" Dashboard</h3></div>
     <div>
         <div class="album py-5">
             <div class="container">
@@ -51,27 +39,30 @@
                                     <div class="d-flex justify-content-between mb-0 pb-2">
                                         <div>
                                             <h4 class="text-muted mb-0">
-                                                <strong>{{ city.city }}, {{ city.country }}</strong></h4>
-                                            <h3 class="display-6"><strong>{{ city.temperature }}°C</strong></h3>
-                                            <p class="mb-1">Description: {{ city.description }}</p>
-                                            <p class="mb-1">Feels like: {{ city.feels_like }}°C</p>
-                                            <p class="mb-1">Humidity: {{ city.humidity }}%</p>
+                                                <strong>{{ city.1.data.name }}, {{ city.1.data.sys.country }}</strong>
+                                            </h4>
+                                            <h3 class="display-6">
+                                                <strong>{{ city.1.data.main.temp|floatformat:0 }}°C</strong></h3>
+                                            <p class="mb-1">
+                                                Description: {{ city.1.data.weather.0.description|title }}</p>
+                                            <p class="mb-1">Feels like: {{ city.1.data.main.feels_like|floatformat:0 }}°C</p>
+                                            <p class="mb-1">Humidity: {{ city.1.data.main.humidity }}%</p>
                                         </div>
                                         <div>
                                             <form method="post">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="delete_city" value="{{ city.city_del }}">
+                                                <input type="hidden" name="delete_city" value="{{ city.0 }}">
                                                 <button value="" type="submit" class="btn-close"
                                                         style="position: absolute; right: 20px; top: 20px;"></button>
                                             </form>
                                             <div style="position: absolute; right: 40px; top: 40px;">
-                                                <img src="https://openweathermap.org/img/wn/{{ city.image }}@2x.png"
+                                                <img src="https://openweathermap.org/img/wn/{{ city.1.data.weather.0.icon }}@2x.png"
                                                      alt="">
                                             </div>
                                         </div>
                                         <div>
-                                            <a href="{{ city.weather_in_db.get_absolute_url }}" class="btn btn-light"
-                                                        style="position: absolute; right: 40px; bottom: 35px;">Detailed</a>
+                                            <a href="{{ city.1.get_absolute_url }}" class="btn btn-light"
+                                               style="position: absolute; right: 40px; bottom: 35px;">Detailed</a>
                                         </div>
                                     </div>
                                 </div>
