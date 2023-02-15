@@ -31,7 +31,7 @@ class CityInputForm(forms.Form):
                                        max_length=33,
                                        validators=[RegexValidator(
                                            regex=r'^[A-Za-z]+$',
-                                           message='Field must contain only letters and numbers.'
+                                           message='Field must contain only letters'
                                        ),
                                            empty_field,
                                            city_not_found, ]
