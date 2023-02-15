@@ -16,7 +16,7 @@ Stay a step ahead of Mother Nature with our intuitive weather platform, giving y
 <a style="font-size: 20px; font-weight: 500" href="http://143.42.49.64:8000/">Try it here</a>
 
 ### What needs to be done
- - city field: validation on an empty field
+ - city field: add place autocomplete
  - navbar: represent current page
  - create forecast block
  - adaptive and responsive
